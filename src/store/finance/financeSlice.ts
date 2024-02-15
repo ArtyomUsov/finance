@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { EstimateType } from "../../api/api";
 
 interface FinanceState {
   time: string[];
-  income: number[];
+  income: EstimateType[];
   expenses: number[];
   balance: number | null;
   strings: number;
@@ -20,8 +21,8 @@ const financeSlice = createSlice({
   name: "finance",
   initialState,
   reducers: {
-    addIncome: (state, action: PayloadAction<number>) => {
-      state.income = [...state.income, action.payload];
+    setIncome: (state, action: PayloadAction<EstimateType[]>) => {
+      state.income = action.payload;
     },
     addExpenses: (state, action: PayloadAction<number>) => {
       state.expenses = [...state.expenses, action.payload];
@@ -35,7 +36,7 @@ const financeSlice = createSlice({
   },
 });
 
-export const { addIncome, addExpenses, addTime, loadStrings } = financeSlice.actions;
+export const { setIncome, addExpenses, addTime, loadStrings } =
+  financeSlice.actions;
 
 export default financeSlice.reducer;
-
