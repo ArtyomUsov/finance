@@ -11,7 +11,7 @@ function App() {
     <>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route path="finance" element={<BalancePage />} />
+          <Route path="" element={<BalancePage />} />
           <Route path="income" element={<IncomePage />} />
           <Route path="expenses" element={<ExpensesPage />} />
           <Route path="*" element={<NotFoundPage />} />

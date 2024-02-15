@@ -1,0 +1,12 @@
+a {
+  color: white;
+  p {
+    margin-left: 10px;
+    // border-radius: 15px;
+    // border: 1px solid rgb(81, 190, 86);
+    color: rgb(81, 190, 86);
+  }
+  &.active {
+    color: rgb(214, 200, 0);
+  }
+}

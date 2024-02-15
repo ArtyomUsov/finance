@@ -6,57 +6,52 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { useEffect, useState } from "react";
-import { EstimateType } from "../api/api";
-
+import { useCallback, useEffect, useState } from "react";
+import { getIncomeEstimate } from "../api/api";
+import { useAppDispatch, useAppSelector } from "../store/store";
+import { setIncome } from "../store/finance/financeSlice";
 
 const IncomePage = () => {
-  const [sourceText, setSourceText] = useState<String>("");
+  const [source, setSource] = useState<String>("");
   const [sum, setSum] = useState<number>();
-  const [income, setIncome] = useState<EstimateType[]>([]);
+  const income = useAppSelector((store) => store.finance.income);
+  // const dispatch = useAppDispatch();
 
   const addIncome = () => {
+    const currentDate = new Date().toLocaleString();
     fetch(
-      "https://b-base-fce24-default-rtdb.europe-west1.firebasedatabase.app/estimate.json",
+      "https://b-base-fce24-default-rtdb.europe-west1.firebasedatabase.app/income.json",
       {
         method: "POST",
         body: JSON.stringify({
-          time: "currentTime",
-          income: sum,
-          description: sourceText,
+          date: currentDate,
+          sum: sum,
+          source: source,
         }),
         headers: {
           "Content-Type": "application/json",
         },
       }
     );
+    // getIncome();
+    setSource("");
+    setSum(+"");
   };
 
-  const getIncome = () => {
-    fetch(
-      "https://b-base-fce24-default-rtdb.europe-west1.firebasedatabase.app/estimate.json"
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        const result = [];
-        for (const key in data) {
-          result.push({
-            id: key,
-            source: data[key].source,
-            sum: data[key].sum,
-            date: data[key].date,
-          });
-        }
-        setIncome(result);
-      });
+  // const getIncome = useCallback(async () => {
+  //   const data = await getIncomeEstimate();
+  //   if (data !== null) {
+  //     dispatch(setIncome(data));
+  //   }
+  // }, [dispatch]);
+
+  const heandleclick = async () => {
+    addIncome();
   };
-  const heandleclick = () => {addIncome()};
 
-  useEffect(() => {
-    getIncome();
-  }, [heandleclick]);
-
-
+  // useEffect(() => {
+  //   getIncome();
+  // }, []);
 
   return (
     <Box sx={{ maxWidth: 600, margin: "auto" }}>
@@ -74,8 +69,8 @@ const IncomePage = () => {
           type="text"
           label="Источник"
           variant="outlined"
-          value={sourceText}
-          onChange={(e) => setSourceText(e.target.value)}
+          value={source}
+          onChange={(e) => setSource(e.target.value)}
         />
         <TextField
           type=""
@@ -83,13 +78,13 @@ const IncomePage = () => {
           label="Сумма"
           variant="outlined"
           value={sum}
-          onChange={(e) => setSum(+(e.target.value))}
+          onChange={(e) => setSum(+e.target.value)}
         />
         <Button
           variant="outlined"
           color="success"
           onClick={heandleclick}
-          disabled={!sourceText && !sum}
+          disabled={!source && !sum}
         >
           Создать
         </Button>
@@ -105,15 +100,13 @@ const IncomePage = () => {
           </TableHead>
           <TableBody>
             {income.map((item) => (
-              <TableRow
-                key={item.date}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
+              <TableRow key={item.id}>
                 <TableCell align="center">{item.source}</TableCell>
-                <TableCell align="center">{item.sum}</TableCell>
-                <TableCell align="right" component="th" scope="row">
-                  {item.date}
+                <TableCell align="center">
+                  {item.sum}
+                  {` р`}
                 </TableCell>
+                <TableCell align="right">{item.date}</TableCell>
               </TableRow>
             ))}
           </TableBody>

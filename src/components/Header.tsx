@@ -1,8 +1,33 @@
-import { Box, Typography } from "@mui/material";
-import React from "react";
-import { Link } from "react-router-dom";
+import { Box } from "@mui/material";
+import { NavLink } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../store/store";
+import { useCallback, useEffect } from "react";
+import { getExpensesEstimate, getIncomeEstimate } from "../api/api";
+import { setExpenses, setIncome } from "../store/finance/financeSlice";
 
 const Header = () => {
+  const balance = useAppSelector((state) => state.finance.balance);
+  const dispatch = useAppDispatch();
+
+  const getExpenses = useCallback(async () => {
+    const data = await getExpensesEstimate();
+    if (data !== null) {
+      dispatch(setExpenses(data));
+    }
+  }, [dispatch]);
+
+  const getIncome = useCallback(async () => {
+    const data = await getIncomeEstimate();
+    if (data !== null) {
+      dispatch(setIncome(data));
+    }
+  }, [dispatch]);
+
+  useEffect(() => {
+    getExpenses();
+    getIncome();
+  }, []);
+
   return (
     <Box
       sx={{
@@ -21,18 +46,18 @@ const Header = () => {
           gap: 20,
         }}
       >
-        <Link
+        <NavLink
           style={{
             textDecorationLine: "none",
             alignContent: "center",
             display: "flex",
             flexWrap: "wrap",
           }}
-          to={"/finance/"}
+          to={"/"}
         >
-          Баланс -{" "}
-        </Link>
-        <Link
+          Баланс - <p> {balance}</p>
+        </NavLink>
+        <NavLink
           style={{
             textDecorationLine: "none",
             alignContent: "center",
@@ -42,8 +67,8 @@ const Header = () => {
           to={"/income"}
         >
           Доходы
-        </Link>
-        <Link
+        </NavLink>
+        <NavLink
           style={{
             textDecorationLine: "none",
             alignContent: "center",
@@ -53,7 +78,7 @@ const Header = () => {
           to={"/expenses"}
         >
           Расходы
-        </Link>
+        </NavLink>
       </Box>
     </Box>
   );

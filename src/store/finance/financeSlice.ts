@@ -2,19 +2,21 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { EstimateType } from "../../api/api";
 
 interface FinanceState {
-  time: string[];
   income: EstimateType[];
-  expenses: number[];
-  balance: number | null;
+  expenses: EstimateType[];
+  balance: number;
   strings: number;
+  totalIncome: number;
+  totalExpenses: number;
 }
 
 const initialState: FinanceState = {
-  time: [],
   income: [],
   expenses: [],
-  balance: null,
+  balance: 0,
   strings: 10,
+  totalIncome: 0,
+  totalExpenses: 0,
 };
 
 const financeSlice = createSlice({
@@ -23,12 +25,16 @@ const financeSlice = createSlice({
   reducers: {
     setIncome: (state, action: PayloadAction<EstimateType[]>) => {
       state.income = action.payload;
+      state.totalIncome = state.income.reduce((acc, estimate) => acc + (+estimate.sum), 0);
+      state.balance = state.totalIncome - state.totalExpenses;
     },
-    addExpenses: (state, action: PayloadAction<number>) => {
-      state.expenses = [...state.expenses, action.payload];
+    setExpenses: (state, action: PayloadAction<EstimateType[]>) => {
+      state.expenses = action.payload;
+      state.totalExpenses = state.expenses.reduce((acc, estimate) => acc + (+estimate.sum), 0);
+      state.balance = state.totalIncome - state.totalExpenses;
     },
-    addTime: (state, action: PayloadAction<string>) => {
-      state.time = [...state.time, action.payload];
+    setBalance: (state, action: PayloadAction<number>) => {
+      state.balance = action.payload;
     },
     loadStrings: (state, action: PayloadAction<number>) => {
       state.strings = action.payload;
@@ -36,7 +42,23 @@ const financeSlice = createSlice({
   },
 });
 
-export const { setIncome, addExpenses, addTime, loadStrings } =
+export const { setIncome, setExpenses, setBalance, loadStrings } =
   financeSlice.actions;
 
 export default financeSlice.reducer;
+
+
+// const calculateBalance = (
+//   income: EstimateType[],
+//   expenses: EstimateType[]
+// ): number => {
+//   const totalIncome = income.reduce(
+//     (acc, estimate) => acc + (+estimate.sum),
+//     0
+//   );
+//   const totalExpenses = expenses.reduce(
+//     (acc, estimate) => acc + (+estimate.sum),
+//     0
+//   );
+//   return totalIncome - totalExpenses;
+// };
