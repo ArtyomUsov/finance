@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Chip, Grid, Typography } from "@mui/material";
 import { useAppSelector } from "../store/store";
 
 const BalancePage = () => {
@@ -7,44 +7,65 @@ const BalancePage = () => {
   const totalExpenses = useAppSelector((state) => state.finance.totalExpenses);
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        margin: 20,
-      }}
-    >
-      <Box
-        sx={{
-          display: "block",
-          justifyContent: "center",
-          margin: 20,
-        }}
-      >
-        <h2>Доходы за всё время</h2>
-        <h2>{totalIncome}</h2>
-      </Box>
-      <Box
-        sx={{
-          display: "block",
-          justifyContent: "center",
-          margin: 20,
-        }}
-      >
-        <h2>Итог</h2>
-        <h2>{balance}</h2>
-      </Box>
-      <Box
-        sx={{
-          display: "block",
-          justifyContent: "center",
-          margin: 20,
-        }}
-      >
-        <h2>Расходы за всё время</h2>
-        <h2>{totalExpenses}</h2>
-      </Box>
-    </Box>
+    <Grid container spacing={4} sx={{mt:10}}>
+      <Grid item xs={6}>
+        <Box sx={{ textAlign: "center" }}>
+          <Typography variant="h4">Доходы за всё время</Typography>
+        </Box>
+      </Grid>
+
+      <Grid item xs={6}>
+        <Box sx={{ textAlign: "center" }}>
+          <Typography variant="h4">Расходы за всё время</Typography>
+        </Box>
+      </Grid>
+      <Grid item xs={6}>
+        <Box sx={{ textAlign: "center" }}>
+          <Chip
+            sx={{
+              fontSize: 30,
+              p: 3,
+            }}
+            label={totalIncome}
+            color="success"
+            variant="outlined"
+          />
+        </Box>
+      </Grid>
+      <Grid item xs={6}>
+        <Box sx={{ textAlign: "center" }}>
+          <Chip
+            sx={{
+              fontSize: 30,
+              p: 3,
+            }}
+            label={totalExpenses}
+            color="error"
+            variant="outlined"
+          />
+        </Box>
+      </Grid>
+      <Grid item xs={12}>
+        <Box sx={{ textAlign: "center" }}>
+          <Typography variant="h4">Итог</Typography>
+        </Box>
+      </Grid>
+      
+      <Grid item xs={12}>
+        <Box sx={{ textAlign: "center" }}>
+          <Chip
+            sx={{
+              fontSize: 30,
+              p: 3,
+            }}
+            label={balance}
+            color={balance > 0 ? "success" : "error"}
+            variant="outlined"
+          />
+        </Box>
+      </Grid>
+      
+    </Grid>
   );
 };
 

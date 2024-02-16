@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Chip } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { useCallback, useEffect } from "react";
@@ -53,13 +53,18 @@ const Header = () => {
             display: "flex",
             flexWrap: "wrap",
           }}
-          to={"/balance"}
+          to={"/finance"}
         >
           Баланс -{" "}
-          <p style={balance > 0 ? { color: "green" } : { color: "red" }}>
-            {" "}
-            {balance}
-          </p>
+          <Chip
+            sx={{
+              fontSize: 30,
+              p: 3,
+            }}
+            label={balance}
+            color={balance > 0 ? "success" : "error"}
+            variant="outlined"
+          />
         </NavLink>
         <NavLink
           style={{
