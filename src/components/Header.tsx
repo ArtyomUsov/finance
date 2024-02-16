@@ -55,7 +55,11 @@ const Header = () => {
           }}
           to={"/balance"}
         >
-          Баланс - <p> {balance}</p>
+          Баланс -{" "}
+          <p style={balance > 0 ? { color: "green" } : { color: "red" }}>
+            {" "}
+            {balance}
+          </p>
         </NavLink>
         <NavLink
           style={{
