@@ -53,7 +53,7 @@ const Header = () => {
             display: "flex",
             flexWrap: "wrap",
           }}
-          to={"/"}
+          to={"/balance"}
         >
           Баланс - <p> {balance}</p>
         </NavLink>
