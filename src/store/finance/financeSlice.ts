@@ -25,16 +25,19 @@ const financeSlice = createSlice({
   reducers: {
     setIncome: (state, action: PayloadAction<EstimateType[]>) => {
       state.income = action.payload;
-      state.totalIncome = state.income.reduce((acc, estimate) => acc + (+estimate.sum), 0);
+      state.totalIncome = state.income.reduce(
+        (acc, estimate) => acc + +estimate.sum,
+        0
+      );
       state.balance = state.totalIncome - state.totalExpenses;
     },
     setExpenses: (state, action: PayloadAction<EstimateType[]>) => {
       state.expenses = action.payload;
-      state.totalExpenses = state.expenses.reduce((acc, estimate) => acc + (+estimate.sum), 0);
+      state.totalExpenses = state.expenses.reduce(
+        (acc, estimate) => acc + +estimate.sum,
+        0
+      );
       state.balance = state.totalIncome - state.totalExpenses;
-    },
-    setBalance: (state, action: PayloadAction<number>) => {
-      state.balance = action.payload;
     },
     loadStrings: (state, action: PayloadAction<number>) => {
       state.strings = action.payload;
@@ -42,23 +45,6 @@ const financeSlice = createSlice({
   },
 });
 
-export const { setIncome, setExpenses, setBalance, loadStrings } =
-  financeSlice.actions;
+export const { setIncome, setExpenses, loadStrings } = financeSlice.actions;
 
 export default financeSlice.reducer;
-
-
-// const calculateBalance = (
-//   income: EstimateType[],
-//   expenses: EstimateType[]
-// ): number => {
-//   const totalIncome = income.reduce(
-//     (acc, estimate) => acc + (+estimate.sum),
-//     0
-//   );
-//   const totalExpenses = expenses.reduce(
-//     (acc, estimate) => acc + (+estimate.sum),
-//     0
-//   );
-//   return totalIncome - totalExpenses;
-// };
