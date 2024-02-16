@@ -1,1 +1,1 @@
-# [Finance](https://artyomusov.github.io/balance)
+# [Finance](https://artyomusov.github.io/finance)
