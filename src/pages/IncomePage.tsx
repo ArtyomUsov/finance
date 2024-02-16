@@ -6,16 +6,16 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { getIncomeEstimate } from "../api/api";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { setIncome } from "../store/finance/financeSlice";
 
 const IncomePage = () => {
-  const [source, setSource] = useState<String>("");
+  const [source, setSource] = useState<string>("");
   const [sum, setSum] = useState<number>();
   const income = useAppSelector((store) => store.finance.income);
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
 
   const addIncome = () => {
     const currentDate = new Date().toLocaleString();
@@ -32,26 +32,21 @@ const IncomePage = () => {
           "Content-Type": "application/json",
         },
       }
-    );
-    // getIncome();
+    ).then(getIncome);
     setSource("");
     setSum(+"");
   };
 
-  // const getIncome = useCallback(async () => {
-  //   const data = await getIncomeEstimate();
-  //   if (data !== null) {
-  //     dispatch(setIncome(data));
-  //   }
-  // }, [dispatch]);
+  const getIncome = useCallback(async () => {
+    const data = await getIncomeEstimate();
+    if (data !== null) {
+      dispatch(setIncome(data));
+    }
+  }, [dispatch]);
 
   const heandleclick = async () => {
     addIncome();
   };
-
-  // useEffect(() => {
-  //   getIncome();
-  // }, []);
 
   return (
     <Box sx={{ maxWidth: 600, margin: "auto" }}>
@@ -73,7 +68,7 @@ const IncomePage = () => {
           onChange={(e) => setSource(e.target.value)}
         />
         <TextField
-          type=""
+          type="number"
           id="outlined-basic"
           label="Сумма"
           variant="outlined"

@@ -6,17 +6,16 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { getExpensesEstimate } from "../api/api";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { setExpenses } from "../store/finance/financeSlice";
-import Header from "../components/Header";
 
 const ExpensesPage = () => {
   const [source, setSource] = useState<String>("");
   const [sum, setSum] = useState<number>();
   const expenses = useAppSelector((store) => store.finance.expenses);
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
 
   const addExpenses = () => {
     const currentDate = new Date().toLocaleString();
@@ -33,26 +32,21 @@ const ExpensesPage = () => {
           "Content-Type": "application/json",
         },
       }
-    );
-    // getExpenses();
+    ).then(getExpenses);
     setSource("");
     setSum(+"");
   };
 
-  // const getExpenses = useCallback(async () => {
-  //   const data = await getExpensesEstimate();
-  //   if (data !== null) {
-  //     dispatch(setExpenses(data));
-  //   }
-  // }, [dispatch]);
+  const getExpenses = useCallback(async () => {
+    const data = await getExpensesEstimate();
+    if (data !== null) {
+      dispatch(setExpenses(data));
+    }
+  }, [dispatch]);
 
   const heandleclick = async () => {
     addExpenses();
   };
-
-  // useEffect(() => {
-  //   getExpenses();
-  // }, []);
 
   return (
     <Box sx={{ maxWidth: 600, margin: "auto" }}>
