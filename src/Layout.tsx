@@ -12,7 +12,7 @@ const Layout = () => {
       <footer>
         <Typography
           sx={{
-            mt: 70,
+            mt: 8,
             display: "flex",
             justifyContent: "center",
           }}
