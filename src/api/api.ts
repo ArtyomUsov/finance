@@ -12,7 +12,7 @@ export const getIncomeEstimate = async () => {
         ...data[key],
       });
     }
-    return correctData;
+    return correctData.reverse();
   }
   throw new Error("Some error");
 };
@@ -31,7 +31,7 @@ export const getExpensesEstimate = async () => {
         ...data[key],
       });
     }
-    return correctData;
+    return correctData.reverse();
   }
   throw new Error("Some error");
 };
